@@ -1,0 +1,10 @@
+[package]
+name = "rust-gl"
+version = "0.1.0"
+authors = ["Ben Owen"]
+
+[dependencies]
+glutin = "0.22.0-alpha3"
+gl = "*"
+winit = "*"
+takeable-option = "*"
