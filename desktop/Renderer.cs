@@ -5,7 +5,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Desktop {
     // Provides a managed wrapper around the unmanaged Renderer type defined in Rust
-    internal class Renderer : IDisposable{
+    internal class Renderer : IDisposable {
         private RendererHandle handle;
 
         public Renderer(IntPtr hwnd) {
@@ -20,22 +20,18 @@ namespace Desktop {
 
         public void Dispose() => Dispose(true);
 
-        protected virtual void Dispose(bool disposing)
-        {
+        protected virtual void Dispose(bool disposing) {
             if (!handle.IsClosed && !handle.IsInvalid) {
                 handle.Dispose();
             }
         }
 
         // Strong typing and memory safety for our unmanaged pointer to the Renderer struct defined in Rust
-        private class RendererHandle : SafeHandleZeroOrMinusOneIsInvalid
-        {
-            public RendererHandle() : base(true)
-            {
+        private class RendererHandle : SafeHandleZeroOrMinusOneIsInvalid {
+            public RendererHandle() : base(true) {
             }
 
-            protected override bool ReleaseHandle()
-            {
+            protected override bool ReleaseHandle() {
                 NativeMethods.destroy_renderer(handle);
                 return true;
             }
