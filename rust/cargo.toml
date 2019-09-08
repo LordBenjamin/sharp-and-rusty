@@ -3,6 +3,9 @@ name = "rust-gl"
 version = "0.1.0"
 authors = ["Ben Owen"]
 
+[lib]
+crate-type = ["cdylib"]
+
 [dependencies]
 glutin = "0.22.0-alpha3"
 gl = "*"
