@@ -1,4 +1,7 @@
 # sharp-and-rusty
+
+![screenshot](https://raw.githubusercontent.com/LordBenjamin/sharp-and-rusty/master/screenshot.png)
+
 C# / .NET Core / WinForms application hosting an OpenGL triangle renderer written in Rust / Glutin.
 
 There is also a full Rust implementation in `main.rs`.
