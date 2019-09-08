@@ -1,21 +1,21 @@
-﻿using System;
-using System.Windows.Forms;
-using Core;
+﻿using System.Windows.Forms;
 
-namespace desktop
+namespace Desktop
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Form form = new Form();
-            form.Show();
+            form.Text = "Sharp and Rusty";
 
-            IntPtr renderer = NativeMethods.create_renderer(form.Handle);
+            using(Renderer renderer = new Renderer(form.Handle)) {
+                form.Paint += (sender, e) => renderer.Draw();
+                form.Resize += (sender, e) =>
+                renderer.Resize(form.Size);
 
-            form.Paint += (sender, e) => NativeMethods.renderer_draw(renderer);
-
-            Application.Run(form);
+                Application.Run(form);
+            }
         }
     }
 }

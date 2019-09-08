@@ -15,9 +15,9 @@ fn main() {
         .with_title("Glutin Triangle")
         .build(&events_loop)
         .unwrap();
-        
-    use glutin::platform::windows::{ WindowExtWindows, };
-        
+
+    use glutin::platform::windows::WindowExtWindows;
+
     let hwnd = window.hwnd();
 
     let r = renderer::Renderer::new(hwnd);
@@ -27,31 +27,29 @@ fn main() {
     let mut raw_context = Takeable::new(r);
 
     events_loop.run(move |event, _, control_flow| {
-            println!("el {:?}", event);
-            *control_flow = ControlFlow::Wait;
+        println!("el {:?}", event);
+        *control_flow = ControlFlow::Wait;
 
-            match event {
-                Event::LoopDestroyed => {
-                    Takeable::take(&mut raw_context); // Make sure it drops first
-                    return;
-                }
-                Event::WindowEvent { ref event, .. } => match event {
-                    WindowEvent::Resized(logical_size) => {
-                        let dpi_factor = window.hidpi_factor();
-                        let size = logical_size.to_physical(dpi_factor);
-                        raw_context.resize(size);
-                    }
-                    
-                    WindowEvent::RedrawRequested => {
-                        raw_context.draw();
-                    }
-
-                    WindowEvent::CloseRequested => {
-                        *control_flow = ControlFlow::Exit
-                    }
-                    _ => (),
-                },
-                _ => (),
+        match event {
+            Event::LoopDestroyed => {
+                Takeable::take(&mut raw_context); // Make sure it drops first
+                return;
             }
-        });
+            Event::WindowEvent { ref event, .. } => match event {
+                WindowEvent::Resized(logical_size) => {
+                    let dpi_factor = window.hidpi_factor();
+                    let size = logical_size.to_physical(dpi_factor);
+                    raw_context.resize(size);
+                }
+
+                WindowEvent::RedrawRequested => {
+                    raw_context.draw();
+                }
+
+                WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
+                _ => (),
+            },
+            _ => (),
+        }
+    });
 }

@@ -1,13 +1,13 @@
 extern crate glutin;
 
-use glutin::{ ContextBuilder, PossiblyCurrent, }; 
-use glutin::platform::windows::{ RawContextExt, };
 use gl::types::*;
+use glutin::platform::windows::RawContextExt;
+use glutin::{ContextBuilder, PossiblyCurrent};
+use std::ffi::CString;
 use std::mem;
+use std::os::raw::c_void;
 use std::ptr;
 use std::str;
-use std::os::raw::c_void;
-use std::ffi::CString;
 
 const VERTEX_SHADER_SOURCE: &str = r#"
 #version 330 core
@@ -33,9 +33,6 @@ void main()
 "#;
 
 pub struct Renderer {
-    #[allow(dead_code)]
-    pub hwnd: *const c_void,
-
     context: glutin::RawContext<PossiblyCurrent>,
     shader_program: GLuint,
     vao: GLuint,
@@ -43,16 +40,12 @@ pub struct Renderer {
 
 impl Renderer {
     pub fn new(hwnd: *mut c_void) -> Renderer {
-        let raw_context = unsafe {
-            ContextBuilder::new()
-                .build_raw_context(hwnd)
-                .unwrap()
-        };
-        
+        let raw_context = unsafe { ContextBuilder::new().build_raw_context(hwnd).unwrap() };
+
         let raw_context = unsafe { raw_context.make_current().unwrap() };
 
         // Create GL content
-         gl::load_with(|symbol| raw_context.get_proc_address(symbol) as *const _);
+        gl::load_with(|symbol| raw_context.get_proc_address(symbol) as *const _);
 
         let (shader_program, vao) = unsafe {
             // Setup shader compilation checks
@@ -167,9 +160,8 @@ impl Renderer {
                 gl::FLOAT,
                 gl::FALSE,
                 6 * mem::size_of::<GLfloat>() as GLsizei,
-                (3 * mem::size_of::<GLfloat>()) as *const c_void
+                (3 * mem::size_of::<GLfloat>()) as *const c_void,
             );
-
 
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
             gl::BindVertexArray(0);
@@ -180,7 +172,11 @@ impl Renderer {
             (shader_program, vao)
         };
 
-        Renderer { hwnd: hwnd, context: raw_context, shader_program: shader_program, vao:vao }
+        Renderer {
+            context: raw_context,
+            shader_program: shader_program,
+            vao: vao,
+        }
     }
 
     pub fn draw(&mut self) {
