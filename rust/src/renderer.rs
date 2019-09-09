@@ -6,6 +6,7 @@ use glutin::platform::windows::RawContextExt;
 use glutin::{ContextBuilder, PossiblyCurrent};
 use std::ffi::CString;
 use std::mem;
+use std::os::raw::c_void;
 use std::ptr;
 use std::str;
 
@@ -128,13 +129,9 @@ impl Renderer {
             // Set up vao and vbos
             let vertices: [f32; 18] = [
                 // left
-                -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
-
-                // right
-                0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-
-                // top
-                0.0,  0.5, 0.0, 0.0, 0.0, 1.0
+                -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, // right
+                0.5, -0.5, 0.0, 0.0, 1.0, 0.0, // top
+                0.0, 0.5, 0.0, 0.0, 0.0, 1.0,
             ];
 
             let (mut vbo, mut vao) = (0, 0);
