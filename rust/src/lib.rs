@@ -1,15 +1,22 @@
 extern crate gl;
 extern crate glutin;
+extern crate raw_window_handle;
 
 mod renderer;
 
+use raw_window_handle::windows::WindowsHandle;
 use renderer::Renderer;
 use std::mem::transmute;
 use std::os::raw::c_void;
 
 #[no_mangle]
 pub extern "C" fn create_renderer(hwnd: *mut c_void) -> *mut Renderer {
-    let renderer = Renderer::new(hwnd);
+    let handle = raw_window_handle::RawWindowHandle::Windows(WindowsHandle {
+        hwnd,
+        ..WindowsHandle::empty()
+    });
+
+    let renderer = Renderer::new(handle);
 
     unsafe { transmute(Box::new(renderer)) }
 }

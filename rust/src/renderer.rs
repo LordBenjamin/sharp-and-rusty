@@ -1,11 +1,11 @@
 extern crate glutin;
+extern crate raw_window_handle;
 
 use gl::types::*;
 use glutin::platform::windows::RawContextExt;
 use glutin::{ContextBuilder, PossiblyCurrent};
 use std::ffi::CString;
 use std::mem;
-use std::os::raw::c_void;
 use std::ptr;
 use std::str;
 
@@ -39,8 +39,15 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new(hwnd: *mut c_void) -> Renderer {
-        let raw_context = unsafe { ContextBuilder::new().build_raw_context(hwnd).unwrap() };
+    pub fn new(raw_handle: raw_window_handle::RawWindowHandle) -> Renderer {
+        let context_builder = ContextBuilder::new();
+
+        let raw_context = match raw_handle {
+            raw_window_handle::RawWindowHandle::Windows(h) => unsafe {
+                context_builder.build_raw_context(h.hwnd).unwrap()
+            },
+            _ => panic!("Unsupported window handle"),
+        };
 
         let raw_context = unsafe { raw_context.make_current().unwrap() };
 

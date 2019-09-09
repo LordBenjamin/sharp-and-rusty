@@ -2,11 +2,13 @@ mod renderer;
 
 extern crate gl;
 extern crate glutin;
+extern crate raw_window_handle;
 extern crate takeable_option;
 
 use glutin::event::{Event, WindowEvent};
 use glutin::event_loop::{ControlFlow, EventLoop};
 use glutin::window::WindowBuilder;
+use raw_window_handle::windows::WindowsHandle;
 use takeable_option::Takeable;
 
 fn main() {
@@ -20,7 +22,12 @@ fn main() {
 
     let hwnd = window.hwnd();
 
-    let r = renderer::Renderer::new(hwnd);
+    let handle = raw_window_handle::RawWindowHandle::Windows(WindowsHandle {
+        hwnd,
+        ..WindowsHandle::empty()
+    });
+
+    let r = renderer::Renderer::new(handle);
 
     // Main loop
 
