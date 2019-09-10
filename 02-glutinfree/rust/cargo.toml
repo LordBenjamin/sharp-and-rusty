@@ -1,0 +1,23 @@
+[package]
+name = "rust-gl"
+version = "0.1.0"
+authors = ["Ben Owen"]
+
+[features]
+default = []
+
+[lib]
+crate-type = ["cdylib"]
+
+[[bin]]
+name="rust-gl"
+
+[dependencies]
+glutin = "0.22.0-alpha3"
+winit = "*"
+takeable-option = "*"
+raw-window-handle = "0.1.2"
+
+[dependencies.wgpu]
+version = "0.3.0"
+features = ["dx12"]
