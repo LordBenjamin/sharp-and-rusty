@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\rust\target\debug\rust_gl.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\rust\target\debug\rust_gl.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)'=='Debug'" />
+    <None Include="..\rust\target\release\rust_gl.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)'=='Release'" />
   </ItemGroup>
 </Project>
