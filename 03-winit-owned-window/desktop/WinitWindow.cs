@@ -6,8 +6,7 @@ using System.Windows.Forms;
 namespace Desktop {
     // Provides a managed wrapper around the unmanaged Renderer type defined in Rust
     [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-    internal class WinitWindow : NativeWindow
-    {
+    internal class WinitWindow : NativeWindow {
         public event FormClosedEventHandler Closed;
 
         // Constant value from "windows.h" header file.
@@ -16,8 +15,7 @@ namespace Desktop {
 
         private IntPtr hwnd;
 
-        public WinitWindow()
-        {
+        public WinitWindow() {
             // Call Rust library to create a window and store the resulting hwnd
             IntPtr pointer = NativeMethods.create_window();
             // Window is now created, assign handle to NativeWindow.
@@ -26,22 +24,20 @@ namespace Desktop {
         }
 
         [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
-        protected override void WndProc(ref Message m)
-        {
+        protected override void WndProc(ref Message m) {
             // Listen for operating system messages
-            switch (m.Msg)
-            {    
+            switch (m.Msg) {
                 case WM_CLOSE:
-                Closed?.Invoke(this, new FormClosedEventArgs(CloseReason.FormOwnerClosing));
-                break;
+                    Closed?.Invoke(this, new FormClosedEventArgs(CloseReason.FormOwnerClosing));
+                    break;
 
                 case WM_SIZE:
-                int lparam = m.LParam.ToInt32();
-                int height = lparam >> 16;
-                int width = lparam & 0xfff;
-                
-                Console.WriteLine("Size: " + width + "x" + height);
-                break;
+                    int lparam = m.LParam.ToInt32();
+                    int height = lparam >> 16;
+                    int width = lparam & 0xfff;
+
+                    Console.WriteLine("Size: " + width + "x" + height);
+                    break;
 
             }
             base.WndProc(ref m);
