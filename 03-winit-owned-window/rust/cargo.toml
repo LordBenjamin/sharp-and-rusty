@@ -1,0 +1,13 @@
+[package]
+name = "winit-owned-window"
+version = "0.1.0"
+authors = ["Ben Owen"]
+
+[features]
+default = []
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+winit = "0.20.0-alpha3"
