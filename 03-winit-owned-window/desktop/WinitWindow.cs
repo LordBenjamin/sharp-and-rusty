@@ -4,8 +4,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace Desktop {
-    // Provides a managed wrapper around the unmanaged Renderer type defined in Rust
-    [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
     internal class WinitWindow : NativeWindow {
         public event FormClosedEventHandler Closed;
 
@@ -23,7 +21,9 @@ namespace Desktop {
             AssignHandle(wrapper.hwnd);
         }
 
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")]
+        // NativeWindow automatically subclasses the window during AssignHandle(), so we can listen to the
+        // messages being pumped. We will process the messages *before* the original WndProc of the native window
+        // gets to see them.
         protected override void WndProc(ref Message m) {
             // Listen for operating system messages
             switch (m.Msg) {

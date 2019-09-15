@@ -7,9 +7,15 @@ namespace Desktop {
     internal class Program {
         [STAThread]
         public static void Main(string[] args) {
+            // Create a new window
             WinitWindow window = new WinitWindow();
+
+            // Create a custom ApplicationContext that will exit when the native window is closed
             CustomApplicationContext context = new CustomApplicationContext(window);
-            Application.Run(context); // Run event loop
+
+            // Run event loop
+            // TODO: Trying to figure out how to do this on the Rust side
+            Application.Run(context); 
         }
     }
 }
