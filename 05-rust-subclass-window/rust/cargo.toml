@@ -1,0 +1,13 @@
+[package]
+name = "net-owned-window"
+version = "0.1.0"
+authors = ["Ben Owen"]
+
+[features]
+default = []
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+winapi = { version = "0.3", features = ["winuser", "commctrl"] }
